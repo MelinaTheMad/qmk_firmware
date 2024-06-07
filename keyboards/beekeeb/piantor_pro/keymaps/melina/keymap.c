@@ -13,7 +13,7 @@
 #define HOME_A LALT_T(KC_A)
 #define HOME_I LGUI_T(KC_I)
 
-#define LT3_Q LT(3, KC_QOUT)
+#define LT3_Q LT(3, KC_Q)
 
 #define LTHMB_1 LALT_T(KC_ESC)
 #define LTHMB_2 KC_BSPC
@@ -37,7 +37,7 @@
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_split_3x6_3(
-      CW_TOGG,    KC_W,    KC_L,    KC_Y,    KC_P,    KC_B,                         KC_Z,    KC_F,    KC_O,    KC_U, KC_QOUT,  KC_DEL,
+      CW_TOGG,    KC_W,    KC_L,    KC_Y,    KC_P,    KC_B,                         KC_Z,    KC_F,    KC_O,    KC_U, KC_QUOT,  KC_DEL,
        KC_TAB,  HOME_C,  HOME_R,  HOME_S,  HOME_T,    KC_G,                         KC_M,  HOME_N,  HOME_E,  HOME_I,  HOME_A, KC_SCLN,
       KC_LSFT,   LT3_Q,    KC_J,    KC_V,    KC_D,    KC_K,                         KC_X,    KC_H, KC_SLSH, KC_COMM,  KC_DOT, KC_BSLS,
                                  LTHMB_1, LTHMB_2, LTHMB_3,                      RTHMB_1, RTHMB_2, RTHMB_3
@@ -97,10 +97,10 @@ combo_t key_combos[] = {
     COMBO(combo_9, KC_9),
     COMBO(combo_0, KC_0),
 
-    COMBO(combo_parenth_open, LSFT(KC_9))
-    COMBO(combo_parenth_close, LSFT(KC_0))
-    COMBO(combo_bracket_open, KC_LBRC)
-    COMBO(combo_bracket_close, KC_RBRC)
-    COMBO(combo_curly_open, LSFT(KC_LBRC))
-    COMBO(combo_curly_close, LSFT(KC_RBRC))
+    COMBO(combo_parenth_open, LSFT(KC_9)),
+    COMBO(combo_parenth_close, LSFT(KC_0)),
+    COMBO(combo_bracket_open, KC_LBRC),
+    COMBO(combo_bracket_close, KC_RBRC),
+    COMBO(combo_curly_open, LSFT(KC_LBRC)),
+    COMBO(combo_curly_close, LSFT(KC_RBRC)),
 };
