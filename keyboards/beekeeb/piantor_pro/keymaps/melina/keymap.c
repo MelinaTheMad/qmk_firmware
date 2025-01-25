@@ -29,6 +29,7 @@ enum custom_keycodes {
     CARET,
     UNDRSCR,
     QSTNMRK,
+    DQUOT,
 };
 
 /* --- Repeat keys --- */
@@ -38,11 +39,11 @@ enum custom_keycodes {
 /* --- Thumb keys --- */
 // Left.
 #define LTHMB_0 LT(2, KC_MINS)
-#define LTHMB_1 UNDRSCR
+#define LTHMB_1 LT(2, UNDRSCR)
 #define LTHMB_2 LT(3, KC_SPC)
 // Right.
 #define RTHMB_0 REPEAT
-#define RTHMB_1 LT(4, KC_ESC)
+#define RTHMB_1 LT(2, KC_ESC)
 #define RTHMB_2 LT(4, KC_ENT)
 
 /* --- Homerow mods --- */
@@ -54,15 +55,15 @@ enum custom_keycodes {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_split_3x6_3(
-       KC_TAB,      KC_F,      KC_D,      KC_H,      KC_W,      KC_P,              KC_Q,      KC_J,      KC_U,      KC_O,      KC_Y,   KC_BSLS,
+       KC_TAB,      KC_F,      KC_D,      KC_H,      KC_W,      KC_P,              KC_Q,      KC_J,      KC_U,      KC_O,      KC_Y,   KC_SLSH,
       KC_BSPC,HM_0(KC_S),HM_1(KC_T),HM_2(KC_N),HM_3(KC_C),      KC_B,              KC_Z, HM_3(KC_R),HM_2(KC_E),HM_1(KC_A),HM_0(KC_I),    COLON,
-      CW_TOGG,LGUI_T(KC_V),    KC_K,      KC_M,      KC_G,   KC_QUOT,              KC_X,      KC_L,   KC_SLSH,   KC_COMM,LGUI_T(KC_DOT),KC_SCLN,
+      CW_TOGG,LGUI_T(KC_V),    KC_K,      KC_M,      KC_G,   KC_QUOT,              KC_X,      KC_L,   KC_SCLN,   KC_COMM,LGUI_T(KC_DOT),KC_BSLS,
                                        LTHMB_0,   LTHMB_1,   LTHMB_2,           RTHMB_0,   RTHMB_1,   RTHMB_2
   ),
     [1] = LAYOUT_split_3x6_3(
       _______,     ATSGN,     LABRC,     RABRC,   KC_BSLS,    KC_GRV,             AMPER,      OCTO,      LBRC,      RBRC,    PERCEN,   _______,
-      _______,HM_0(BANG),HM_1(MINUS),HM_2(PLUS),HM_3(EQUAL),   COLON,              PIPE,HM_3(LPAREN),HM_2(LSBRC),HM_1(RSBRC),HM_0(RPAREN),_______,
-      QSTNMRK,     TILDE,   KC_SLSH,      STAR,     CARET,      PIPE,             TILDE,    DOLLAR,   _______,   _______,   _______,   _______,
+      _______,HM_0(BANG),HM_1(MINUS),HM_2(PLUS),HM_3(EQUAL), QSTNMRK,              PIPE,HM_3(LPAREN),HM_2(LSBRC),HM_1(RSBRC),HM_0(RPAREN),_______,
+      _______,     TILDE,   KC_SLSH,      STAR,     CARET,     DQUOT,             TILDE,    DOLLAR,   _______,   _______,   _______,   _______,
                                        _______,   _______,   _______,           _______,   _______,   _______
   ),
     [2] = LAYOUT_split_3x6_3(
@@ -139,6 +140,18 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QK_BOOT:
+            return true;
+        case LTHMB_1:
+            if (record->event.pressed && record->tap.count) {
+                tap_code16(LSFT(KC_MINUS));
+                return false;
+            }
+            return true;
+        case RTHMB_1:
+            if (record->event.pressed && record->tap.count) {
+                tap_code16(KC_ESC);
+                return false;
+            }
             return true;
         case HM_0(BANG):
             if (record->event.pressed && record->tap.count) {
@@ -268,6 +281,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(LSFT(KC_SLSH));
                 return false;
             }
+        case DQUOT:
+            if (record->event.pressed) {
+                tap_code16(LSFT(KC_QUOT));
+                return false;
+            }
             /*case REPEAT: if (record->event.pressed && record->tap.count) { repeat_key_invoke(&record->event); record->event.pressed = false; repeat_key_invoke(&record->event); return false; } return true; case ALT_REPEAT: if (record->event.pressed && record->tap.count) { alt_repeat_key_invoke(&record->event); record->event.pressed = false; alt_repeat_key_invoke(&record->event); return false; } return true;*/
     }
     if (!process_achordion(keycode, record)) {
@@ -290,7 +308,13 @@ bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, ui
         case RTHMB_1:
         case RTHMB_2:
             return (other_record->event.key.row != 3);
+        case LGUI_T(KC_V):
+        case LGUI_T(KC_DOT):
+            if (other_keycode == LTHMB_2) {
+                return true;
+            }
     }
+
     if (other_record->event.key.col == 0) {
         return true;
     }
