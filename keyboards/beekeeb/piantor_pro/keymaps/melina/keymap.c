@@ -1,6 +1,7 @@
 // Copyright 2023 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "keycodes.h"
 #include QMK_KEYBOARD_H
 #include "features/achordion.h"
 
@@ -30,24 +31,26 @@ enum custom_keycodes {
     UNDRSCR,
     QSTNMRK,
     DQUOT,
+
+    REPEAT_T,
 };
 
 /* --- Repeat keys --- */
-#define REPEAT QK_REP
+#define REPEAT LT(1, REPEAT_T)
 #define ALT_REPEAT QK_AREP
 
 /* --- Thumb keys --- */
 // Left.
-#define LTHMB_0 LT(2, KC_MINS)
-#define LTHMB_1 LT(2, UNDRSCR)
-#define LTHMB_2 LT(3, KC_SPC)
+#define LTHMB_0 LSG_T(KC_SLSH)
+#define LTHMB_1 LGUI_T(UNDRSCR)
+#define LTHMB_2 LT(2, KC_SPC)
 // Right.
 #define RTHMB_0 REPEAT
-#define RTHMB_1 LT(2, KC_ESC)
+#define RTHMB_1 LT(3, KC_ESC)
 #define RTHMB_2 LT(4, KC_ENT)
 
 /* --- Homerow mods --- */
-#define HM_0(x) LT(1, x)
+#define HM_0(x) LT(3, x)
 #define HM_1(x) LALT_T(x)
 #define HM_2(x) LCTL_T(x)
 #define HM_3(x) LSFT_T(x)
@@ -55,27 +58,27 @@ enum custom_keycodes {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_split_3x6_3(
-       KC_TAB,      KC_F,      KC_D,      KC_H,      KC_W,      KC_P,              KC_Q,      KC_J,      KC_U,      KC_O,      KC_Y,   KC_SLSH,
-      KC_BSPC,HM_0(KC_S),HM_1(KC_T),HM_2(KC_N),HM_3(KC_C),      KC_B,              KC_Z, HM_3(KC_R),HM_2(KC_E),HM_1(KC_A),HM_0(KC_I),    COLON,
-      CW_TOGG,LGUI_T(KC_V),    KC_K,      KC_M,      KC_G,   KC_QUOT,              KC_X,      KC_L,   KC_SCLN,   KC_COMM,LGUI_T(KC_DOT),KC_BSLS,
+       KC_TAB,      KC_F,      KC_D,      KC_H,      KC_W,      KC_P,              KC_Q,      KC_J,      KC_U,      KC_O,      KC_Y,    KC_DEL,
+      KC_BSPC,HM_0(KC_S),HM_1(KC_T),HM_2(KC_N),HM_3(KC_C),      KC_B,              KC_X, HM_3(KC_R),HM_2(KC_E),HM_1(KC_A),HM_0(KC_I),    COLON,
+        DQUOT,LGUI_T(KC_V),    KC_K,      KC_M,      KC_G,   KC_QUOT,              KC_Z,      KC_L,   KC_SCLN,   KC_COMM,LGUI_T(KC_DOT),CW_TOGG,
                                        LTHMB_0,   LTHMB_1,   LTHMB_2,           RTHMB_0,   RTHMB_1,   RTHMB_2
   ),
     [1] = LAYOUT_split_3x6_3(
-      _______,     ATSGN,     LABRC,     RABRC,   KC_BSLS,    KC_GRV,             AMPER,      OCTO,      LBRC,      RBRC,    PERCEN,   _______,
-      _______,HM_0(BANG),HM_1(MINUS),HM_2(PLUS),HM_3(EQUAL), QSTNMRK,              PIPE,HM_3(LPAREN),HM_2(LSBRC),HM_1(RSBRC),HM_0(RPAREN),_______,
-      _______,     TILDE,   KC_SLSH,      STAR,     CARET,     DQUOT,             TILDE,    DOLLAR,   _______,   _______,   _______,   _______,
-                                       _______,   _______,   _______,           _______,   _______,   _______
-  ),
-    [2] = LAYOUT_split_3x6_3(
-      _______,   _______,      KC_6,      KC_5,      KC_4,   _______,           _______,      KC_4,      KC_5,      KC_6,   _______,   _______,
+      _______,   _______,      KC_6,      KC_5,      KC_4,   _______,           _______,      KC_4,      KC_5,      KC_6,    PERCEN,   _______,
       _______,HM_0(KC_0),HM_1(KC_3),HM_2(KC_2),HM_3(KC_1),   _______,           _______,HM_3(KC_1),HM_2(KC_2),HM_1(KC_3),HM_0(KC_0),   _______,
       _______,   _______,      KC_9,      KC_8,      KC_7,   _______,           _______,      KC_7,      KC_8,      KC_9,   _______,   _______,
                                        _______,   _______,   _______,           _______,   _______,   _______
-    ),
+  ),
+    [2] = LAYOUT_split_3x6_3(
+      _______,   _______,      KC_6,      KC_5,      KC_4,   _______,           _______,   KC_PGDN,   KC_PGUP,   KC_HOME,    PERCEN,   _______,
+      _______,HM_0(KC_0),HM_1(KC_3),HM_2(KC_2),HM_3(KC_1),   _______,           KC_LEFT,HM_3(KC_DOWN),HM_2(KC_UP),HM_1(KC_RIGHT),HM_0(KC_END),_______,
+      _______,   _______,      KC_9,      KC_8,      KC_7,   _______,           _______,   _______,   _______,   _______,   _______,   _______,
+                                       _______,   _______,   _______,           _______,   _______,   _______
+  ),
     [3] = LAYOUT_split_3x6_3(
-      _______,   _______,     KC_P7,     KC_P8,     KC_P9,   _______,           _______,   KC_PGDN,   KC_PGUP,   KC_HOME,   _______,   _______,
-      _______,HM_0(KC_P0),HM_1(KC_P4),HM_2(KC_P5),HM_3(KC_P6),_______,          KC_LEFT,HM_3(KC_DOWN),HM_2(KC_UP),HM_1(KC_RIGHT),HM_0(KC_END),_______,
-      _______,   _______,     KC_P1,     KC_P2,     KC_P3,   _______,           _______,   KC_MINS,    KC_EQL,    KC_GRV,   _______,   _______,
+      _______,     ATSGN,     LABRC,     RABRC,     QSTNMRK,    PIPE,           KC_BSLS,      OCTO,      LBRC,      RBRC,    PERCEN,   _______,
+      _______,HM_0(BANG),HM_1(MINUS),HM_2(PLUS),HM_3(EQUAL),   AMPER,           _______,HM_3(LPAREN),HM_2(LSBRC),HM_1(RSBRC),HM_0(RPAREN),_______,
+      _______,LGUI_T(TILDE), KC_SLSH,     STAR,     CARET,     DQUOT,            KC_GRV,    DOLLAR,   _______,   _______,   _______,   _______,
                                        _______,   _______,   _______,           _______,   _______,   _______
   ),
     [4] = LAYOUT_split_3x6_3(
@@ -241,6 +244,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(LSFT(KC_SCLN));
                 return false;
             }
+        case LGUI_T(TILDE):
+            if (record->event.pressed && record->tap.count) {
+                tap_code16(LSFT(KC_GRV));
+                return false;
+            }
+            return true;
         case TILDE:
             if (record->event.pressed) {
                 tap_code16(LSFT(KC_GRV));
@@ -286,7 +295,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(LSFT(KC_QUOT));
                 return false;
             }
-            /*case REPEAT: if (record->event.pressed && record->tap.count) { repeat_key_invoke(&record->event); record->event.pressed = false; repeat_key_invoke(&record->event); return false; } return true; case ALT_REPEAT: if (record->event.pressed && record->tap.count) { alt_repeat_key_invoke(&record->event); record->event.pressed = false; alt_repeat_key_invoke(&record->event); return false; } return true;*/
+        case REPEAT:
+            if (record->event.pressed && record->tap.count) {
+                repeat_key_invoke(&record->event);
+                record->event.pressed = false;
+                repeat_key_invoke(&record->event);
+                return false;
+            }
+            return true;
+        /*case ALT_REPEAT: if (record->event.pressed && record->tap.count) { alt_repeat_key_invoke(&record->event); record->event.pressed = false; alt_repeat_key_invoke(&record->event); return false; } return true;*/
     }
     if (!process_achordion(keycode, record)) {
         return false;
